@@ -4,30 +4,28 @@
 
 int getLine(char line[], int size);
 size_t stringLength(const char *s);
-char *removeSpace(const char *string);
+char *removeTrailingBlanks(char *dest, char *src, int len);
 
 int main()
 {
     // traverse the string
-    int len = 0;
-
-    const char *s = "google something";
-    size_t length = stringLength(s);
-    char *newString = removeSpace(s);
-
-    // printf("string length: %s is: %d\n", s, length);
-    printf("removed space string: %s\n", newString);
-
-    // char line[MAXSIZE];
-    // char longestLine[MAXSIZE];
-
+    // int len = 0;
+    // char line[MAXSIZE]; 
     // while ((len = getLine(line, MAXSIZE)) > 0){
-    
 
-    //     // TODO: remove trailing blanks
-    //     // TODO: remove tabs
-    //     // TODO: Delete entire blank lines
     // }
+
+    char *srcString = "something   ";
+    char destString[MAXSIZE]; 
+    int lenSrcString = stringLength(srcString);
+    char *newString = removeTrailingBlanks(destString, srcString, lenSrcString);
+
+    int newLength = stringLength(newString);
+    int oldLength = stringLength(srcString);
+
+    printf("Old length: %d ----- New length: %d\n", oldLength, newLength); 
+
+    printf("current string: %s\n", newString); 
 
 }
 
@@ -63,23 +61,31 @@ size_t stringLength(const char *s){
 
 // to build remove trailing space
 
-char *removeSpace(const char *str){
-    size_t length = stringLength(str);
-    char *dest = malloc(length + 1);
 
-    if (dest == NULL) return NULL;
+char *removeTrailingBlanks(char *destString, char *src, int len){
+    int i = 0;
+    int currentIndex = len - 1;
 
-    while (*str != '\0'){
-        if (*str == ' ' || *str == '\t' || *str == '\n'){
-            ++str;
-            continue;
+    // printf("Current Index is: %d\n", currentIndex); 
+    // printf("Char: %c\n", src[5]); 
+    // I was hitting the null character
+    // hence the trailing space could were not removed
+
+    while (currentIndex > 0){
+        char currentChar = src[currentIndex];
+        if (currentChar != ' ' && currentChar != '\t' && currentChar != '\n'){
+            break;
         }
-        
-        *dest = *str;
-        ++dest;
-        ++str;
-
+        currentIndex--;
     }
-    *dest = '\0';
-    return dest;
+
+    // printf("The current Index outside of the loop is: %d\n", currentIndex);
+
+    while (i < currentIndex + 1){
+        destString[i] = src[i]; 
+        i++;
+    }
+
+    destString[i] = '\0';
+    return destString;
 }
